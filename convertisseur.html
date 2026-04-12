@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertisseur Bin/Hex/Dec</title>
+    <style>
+        body { font-family: Arial; max-width: 500px; margin: 50px auto; padding: 20px; background: #f0f0f0; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        input { padding: 15px; margin: 10px 0; width: 100%; font-size: 18px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { padding: 15px; margin: 10px 0; width: 100%; font-size: 18px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background 0.3s; }
+        button:hover { background: #45a049; }
+        .result { background: white; padding: 20px; border-radius: 5px; margin-top: 20px; font-family: monospace; font-size: 16px; }
+        .label { font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Convertisseur Bin/Hex/Dec</h1>
+    <p>Entrez un nombre (décimal, binaire ou hexadécimal )</p>
+    <input type="text" id="input" placeholder="Ex: 255, 11111111, 0FF" oninput="convert()">
+    <button onclick="clearInput()"> Effacer</button>
+    <div id="result"></div>
+    <script>
+        function convert() {
+            const input = document.getElementById('input').value.trim().toUpperCase();
+            if (!input) return;
+            const resultDiv = document.getElementById('result');
+            try {
+                let dec, bin, hex;
+                if (input.startsWith('0')) {
+                    dec = parseInt(input.slice(2), 16);
+                    hex = input;
+                    bin = dec.toString(2);
+                } else if (/^[01]+$/.test(input)) {
+                    dec = parseInt(input, 2);
+                    bin = input;
+                    hex = '' + dec.toString(16);
+                } else {
+                    dec = parseInt(input, 10);
+                    bin = dec.toString(2);
+                    hex = '' + dec.toString(16);
+                }
+                resultDiv.innerHTML = `
+                    <div class="result">
+                        <div><span class="label">Decimal:</span> ${dec}</div>
+                        <div><span class="label">Binaire:</span> ${bin}</div>
+                        <div><span class="label">Hexadécimal:</span> ${hex}</div>
+                    </div>
+                `;
+            } catch (e) {
+                resultDiv.innerHTML = '<div class="result" style="color: red;">Valeur invalide</div>';
+            }
+        }
+        function clearInput() {
+            document.getElementById('input').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
